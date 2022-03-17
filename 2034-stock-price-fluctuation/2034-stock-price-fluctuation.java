@@ -2,31 +2,31 @@ class StockPrice {
     
     private TreeMap<Integer, Integer> timestampPriceMap;
     
-    private TreeMap<Integer, Integer> priceOccurenceMap;
+    private TreeMap<Integer, Integer> priceOccurrenceMap;
     
 
     public StockPrice() {
         timestampPriceMap = new TreeMap<>();
-        priceOccurenceMap = new TreeMap<>();
+        priceOccurrenceMap = new TreeMap<>();
     }
     
     public void update(int timestamp, int price) {
         if (timestampPriceMap.containsKey(timestamp)) {
-            if (priceOccurenceMap.get(timestampPriceMap.get(timestamp)) > 1) {
-                priceOccurenceMap.put(timestampPriceMap.get(timestamp), 
-                                      priceOccurenceMap.get(timestampPriceMap.get(timestamp)) - 1);
-            } else {
-                priceOccurenceMap.remove(timestampPriceMap.get(timestamp));
+            int previousPriceAtTimestamp = timestampPriceMap.get(timestamp);
+            priceOccurrenceMap.put(previousPriceAtTimestamp, 
+                                   priceOccurrenceMap.get(previousPriceAtTimestamp) - 1);
+            if (priceOccurrenceMap.get(previousPriceAtTimestamp) == 0) {
+                priceOccurrenceMap.remove(previousPriceAtTimestamp);
             }
         }
         
         timestampPriceMap.put(timestamp, price);
         
-        if (priceOccurenceMap.containsKey(price)) {
-            priceOccurenceMap.put(price, priceOccurenceMap.get(price) + 1);
-        } else {
-            priceOccurenceMap.put(price, 1);
+        int occurrence = 1;
+        if (priceOccurrenceMap.containsKey(price)) {
+            occurrence = priceOccurrenceMap.get(price) + 1;
         }
+        priceOccurrenceMap.put(price, occurrence);
     }
     
     public int current() {
@@ -34,11 +34,11 @@ class StockPrice {
     }
     
     public int maximum() {
-        return priceOccurenceMap.lastEntry().getKey();
+        return priceOccurrenceMap.lastKey();
     }
     
     public int minimum() {
-        return priceOccurenceMap.firstEntry().getKey();
+        return priceOccurrenceMap.firstKey();
     }
 }
 
