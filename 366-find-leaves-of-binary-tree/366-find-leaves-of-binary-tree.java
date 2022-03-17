@@ -16,25 +16,31 @@
 class Solution {
     public List<List<Integer>> findLeaves(TreeNode root) {
         List<List<Integer>> output = new ArrayList<>();
-        while (root != null && (root.left != null || root.right != null)) {
-            List<Integer> leaves = collectAndRemoveLeaves(root);
-            output.add(leaves);
+        
+        if (root == null) {
+            return output;
         }
-        if (root != null) {
-            List<Integer> leaves = new ArrayList<>();
-            leaves.add(root.val);
-            output.add(leaves);
+        
+        while (root.left != null || root.right != null) {
+            output.add(collectAndRemoveLeaves(root));
         }
+        
+        List<Integer> leaves = new ArrayList<>();
+        leaves.add(root.val);
+        output.add(leaves);
+        
         return output;
     }
     
     private List<Integer> collectAndRemoveLeaves(TreeNode root) {
         List<Integer> leaves = new ArrayList<>();
         
-        Deque<TreeNode> stack = new ArrayDeque<>();
-        if (root != null) {
-            stack.push(root);
+        if (root == null) {
+            return leaves;
         }
+        
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        stack.push(root);
         
         while (!stack.isEmpty()) {
             TreeNode node = stack.pop();
