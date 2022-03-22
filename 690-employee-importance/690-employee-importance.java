@@ -9,20 +9,23 @@ class Employee {
 
 class Solution {
     public int getImportance(List<Employee> employees, int id) {
-        Employee employee = findEmployee(employees, id);
-        int totalImportance = employee.importance;
-        for (int subordinateId : employee.subordinates) {
-            totalImportance += getImportance(employees, subordinateId);
-        }
-        return totalImportance;
+        return calculateTotalImportance(mapify(employees), id);
     }
     
-    private Employee findEmployee(List<Employee> employees, int id) {
+    private Map<Integer, Employee> mapify(List<Employee> employees) {
+        Map<Integer, Employee> employeeMap = new HashMap<>();
         for (Employee employee : employees) {
-            if (employee.id == id) {
-                return employee;
-            }
+            employeeMap.put(employee.id, employee);
         }
-        return null;
+        return employeeMap;
+    }
+    
+    private int calculateTotalImportance(Map<Integer, Employee> employeeMap, int id) {
+        Employee employee = employeeMap.get(id);
+        int totalImportance = employee.importance;
+        for (int subordinateId : employee.subordinates) {
+            totalImportance += calculateTotalImportance(employeeMap, subordinateId);
+        }
+        return totalImportance;
     }
 }
