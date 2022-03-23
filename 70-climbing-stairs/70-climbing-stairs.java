@@ -12,13 +12,14 @@ class Solution {
             return 2;
         }
         
-        int previous1 = 1, previous2 = 2;
-        for (int i = 3; i < n + 1; ++i) {
-            int sum = previous1 + previous2;
-            previous1 = previous2;
-            previous2 = sum;
+        int i = 3;
+        int allWaysToReachIMinus2thStep = 1, allWaysToReachIMinus1thStep = 2;
+        for ( ; i < n + 1; ++i) {
+            int allWaysToReachIthStep = allWaysToReachIMinus2thStep + allWaysToReachIMinus1thStep;
+            allWaysToReachIMinus2thStep = allWaysToReachIMinus1thStep;
+            allWaysToReachIMinus1thStep = allWaysToReachIthStep;
         }
         
-        return previous2;
+        return allWaysToReachIMinus1thStep;
     }
 }
