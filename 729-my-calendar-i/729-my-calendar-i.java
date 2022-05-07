@@ -1,42 +1,17 @@
 class MyCalendar {
     
-    private TreeMap<Integer, Character> timeLine;
+    private TreeMap<Integer, Integer> bookings;
 
     public MyCalendar() {
-        this.timeLine = new TreeMap<>();
+        this.bookings = new TreeMap<>();
     }
     
     public boolean book(int start, int end) {
-        if (timeLine.containsKey(start) && timeLine.get(start) != 'E') {
+        Map.Entry<Integer, Integer> prevBooking = bookings.lowerEntry(end);
+        if (prevBooking != null && prevBooking.getValue() > start) {
             return false;
         }
-        if (timeLine.containsKey(end) && timeLine.get(end) != 'S') {
-            return false;
-        }
-        
-        if (timeLine.lowerEntry(start) != null && timeLine.lowerEntry(start).getValue() != 'E' && !timeLine.containsKey(start)) {
-            return false;
-        }
-        if (timeLine.higherEntry(end) != null && timeLine.higherEntry(end).getValue() != 'S' && !timeLine.containsKey(end)) {
-            return false;
-        }
-        
-        if (timeLine.higherKey(start) != null && timeLine.higherKey(start) < end) {
-            return false;
-        }
-        
-        if (timeLine.containsKey(start)) {
-            timeLine.put(start, 'T');
-        } else {
-            timeLine.put(start, 'S');
-        }
-        
-        if (timeLine.containsKey(end)) {
-            timeLine.put(end, 'T');
-        } else {
-            timeLine.put(end, 'E');
-        }
-        
+        bookings.put(start, end);
         return true;
     }
 }
